@@ -1,0 +1,24 @@
+Uriel Programming Library
+Greg Rosenblatt 2005
+
+============
+Installation
+============
+
+Extract to a directory of your choice.
+
+At the command prompt type:
+
+	python setup.py install
+
+================
+Using the client
+================
+
+Edit the clientconfig.txt:
+	-set the appropriate IP address (ie. 127.0.0.1 for localhost)
+	-set your username and password
+
+Then at the command prompt type:
+
+	python client.py

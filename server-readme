@@ -1,0 +1,16 @@
+Network Game
+Greg Rosenblatt 2005
+
+============
+Installation
+============
+
+Extract to a directory of your choice.
+
+================
+Using the server
+================
+
+At the command prompt type:
+
+	python server.py

@@ -1,0 +1,118 @@
+components
+==========
+View	# viewport, projection, and "scene"
+Texture
+	-Mipmapped
+	-Image
+Color
+Rect
+VertexArrays?
+
+surfacetype-independent texture loading
+resourcetype-independent resource mapping/reloading
+
+todo
+====
+simplify methodproxy to not use pre-arguments... unnecessary
+and change filename or class name for that...
+
+separate MainWindow from pygame dependencies?
+
+clipper needs to be fixed to clip only the union of the old and new rect
+
+package-based recursive unittest setup
+once a test module fails, the recursive testing halts
+
+uriel.trivial to contain trivial-communication components (like the controller)
+
+foreground scene
+gui scene
+	-intermediate scene (copy to texture)
+
+
+custom immediate-mode scenes that don't need the retained-mode renderer?
+background
+foreground
+render-to-texture
+
+retained-mode:
+build scene graph
+process scene graph to make a state graph
+render(state_graph)
+scene graph updates -> minimal state graph updates
+
+render(list of state_graphs):	# something like this
+	clear color bit
+	for each graph:
+		clear depth bit
+		render graph
+
+backface culling?
+
+non-pickable windows?
+
+font loading dialog or config
+ImageFont
+create image with glyph margins
+
+text-encoders/interpreters/filters for documents?
+cursor moves through various font-state regions to determine target for input
+
+for encoded formatting:
+normal text input is not interpreted
+interpreter mode entered through holding a key or something
+pasted text input always interpreted?
+copied text can be plain or encoded
+
+for keyword coloring:
+all input is always interpreted
+no encoding necessary for copy/paste data
+
+the clipboard might need to store type info to distinguish plain and encoded?
+or use a paste-plaintext option for non-interpreted input
+
+TextFragment/String/Chunk/Something, TextLine, TextMultiLine/Paragraph/Document
+line combines multiple fragments and uses largest font for dimensions...
+
+handling tabs in TextLine rendering
+
+resize resets opengl context
+
+distinction between: scenegraph, rendergraph/stategraph?
+renderer.RenderScenething(stategraph)?
+
+brushes as scenegraph nodes to replace OnDraw() ?
+
+fix sporadic mouse position problem at start of app (using the appactive event?)
+
+pygame vs. opengl clipper
+
+render-to-texture using glCopyTexImage2D
+
+Rendering Pipeline:
+Shader(texture, color)
+Quad(alpha, shader, clipper, z-depth, rect)
+sort quads by state:
+render state as a tuple for sorting: (shader, clipregion, z-depth)
+-by alpha on/off
+if alpha off:
+	-shader
+	-clipper
+	-z-depth
+else:
+	z-depth
+
+2D and 3D rendering modules
+
+poweroftwo surfaces for textures
+
+procedural surface creation (and how to store as a unique resource)
+
+clipping inside render pipeline:
+	window OnDraw will have: clip = renderer.Clip(self.rect) # scope guard
+
+rendering:
+opaque texture-sorted
+transparent depth-sorted
+
+once the gui and renderer are well-developed, overhaul the client

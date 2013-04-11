@@ -1,0 +1,442 @@
+TODO
+====
+separate the externalState of an entity into groups for particular mediums
+[visual, auditory, psi, etc.] that are perceived depending on perception
+
+Keyboard Interrupt for commands in admin console
+
+uriel.playersenses should be more dynamic
+
+new client controllers for multiple controllable identities
+one view for each identity
+unified model
+
+*****************************************************
+don't forget to verify the existence of OnCommand, and check command type range
+
+so a new command format: command = (entityid, (type, args))
+
+change the role of the entitycontroller so that it becomes optional
+unified commandable object interface through OnCommand
+
+use AI client ideas for normal clients?
+playercontroller: client-controlled entities list
+commands are sent with an entity id
+
+higher level entity abstraction to include more than in-game objects?
+ie. in-game characters and out-of-game player accounts
+abstract operations/actions (including move)
+
+affected files with these changes:
+percepts perception? server playercontroller adminplayercontroller
+and add a new playeraccount-like object?
+*****************************************************
+
+operation(arguments)
+arguments = entities and/or operations ? seems like use-command
+
+
+location/locale as a better name for space, or should it be a space/sector pair?
+position instead of sector or in addition to a location pairing?
+
+terrain/resource/substances as entities
+
+quantum-like ideas for generalization of similar entities (in the substance sense)
+
+dictionary-style sector indexing so that unused sectors don't exist
+need a new scheme for tagging (stamping) sector state changes
+
+deal with new and del space percept in awareness or perception?
+maybe not necessary with new Container type
+
+entities can be spaces, and their positional slots for other entities are sectors
+dictionary-style entity[slot]
+maybe now just use Container?
+
+maybe auditory signals need to have regionSize=1 for proper sound propogation rules
+
+line of sight / sound propogation rules
+obstacles/filters and sector tracking
+class Object(Entity) to track common object attributes? (movement or vision obstacle?)
+
+ambient region / ambient_change percept
+maybe ambient light looked up in computational reverse based on index instead?
+
+containers and examine/inspect, get/drop, open/closed, visibility properties
+
+entity links/attachments to form structures/networks
+
+GUI TODO
+========
+fix sporadic mouse position problem at start of app (using the appactive event?)
+
+Rendering Pipeline:
+Shader(texture, color)
+Quad(alpha, shader, clipper, z-depth, rect)
+sort quads:
+-by alpha on/off
+if alpha off:
+	-shader
+	-clipper
+else:
+	z-depth
+
+Longterm
+========
+curses admin client (currently no official curses module for windows, which sucks)
+
+uriel.util.countlines to support additional and switchable source file formats
+
+disembodied admin can manifest himself
+disembodied admin entities operating on mediumTypes.admin to be invisible to players
+
+save client sector memories in file when sector count reaches a limit?
+reload when you approach them again
+able to view them offline
+always keep sectors in view range in memory
+
+client-side helper-AI
+(ex. holding down the move key, it sends Move() again when it sees you move)
+and server-side helper-AI? useful if you get disconnected
+
+obstacles to movement
+make use of a relational database... harddrive usage to relieve memory somehow?
+additional RPC interface for AI clients (for directing updates to particular NPCs)
+improve documentation
+setup some doctests for uriel modules (like enum and struct)
+line-of-sight culling and whatever sensor filtering (refactor GetRegionsInRange)
+illumination-culling rules
+optimize sensormap for regions of size 1?
+create custom reactors for client and server to improve main loops?
+  -network updates less often
+make recordings and playback client
+improve login system - include banning system...
+make elevation apparent somehow... (opengl client i guess)
+
+optimize these bastards if possible:
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      298    0.579    0.002    0.633    0.002 sensor.py:71(ListenTo)
+     7410    0.548    0.000    0.548    0.000 space.py:45(IsViewer)
+      149    0.522    0.004    1.187    0.008 perception.py:113(_Update)
+      149    0.500    0.003    2.062    0.014 perception.py:78(ChangeSector)
+
+GetRegionsInRange doesn't seem to be a problem? thought it was before...
+try out stackless python?
+
+ideas:
+growing plants (invisible seeds, then change mediums to visual when sprouting?)
+pole of perception for spawning awarenesses
+doubles
+camera vision / remote controls
+
+USE-action system
+=================
+## i think i took care of the system-based issues here, but leaving it for reference
+signal/percept for actions-use (like attack)
+sustained: entity "activity" as a state?
+event: effect? *use? action? (but this word is already being used...?)
+so... action-signal? and use-signal? maybe specific use-signal isn't necessary
+"use" as a type of action instead?
+
+use-action examples?
+(while holding) use a sword - attack
+attack a can of tuna - yield scrap metal (containing a resource) and the tuna
+operate a control panel for viewer or remote-control robot or something
+
+AI structure
+============
+for any given problem (even things that aren't pathfinding):
+	-goal	(target state)
+	-location relative to goal (aka the AI entity's current state)
+	-path to goal
+		-objectives on the path
+			(intermediate states and actions to get to the next state)
+
+GUI
+===
+
+incorporate a crappy gui lib for the time being, like ocempgui
+possible to bind this C++ gui to python?:
+http://www.gamedev.net/community/forums/topic.asp?topic_id=325963
+
+chain of responsibility-
+http://www.python.org/workshops/1997-10/proceedings/savikko.html
+
+or make somebody learn how to make a gui from scratch:
+http://www.gamedev.net/reference/articles/article994.asp
+http://www.gamedev.net/reference/articles/article999.asp
+http://www.gamedev.net/reference/articles/article1000.asp
+http://www.gamedev.net/reference/articles/article737.asp
+
+NOTES
+=====
+simulation nightmare cases:
+-the clockmaker on a remote planet making billions of clocks and stripping the planet
+-cameras which record their percepts for later viewing (eating a shitload of memory)
+
+create resource -> terrain mapping
+don't forget, terrains belong on a layer below characters
+define floor relationship with terrain (or surfaces) for movement and speed rules
+
+terrain types:
+rocks
+stone
+sand
+soil
+mud
+swamp
+water
+
+resources in terrain:
+sand	*	3 basic soil types
+clay	*
+silt	*
+lime
+organic
+water
+air
+
+example loamy ideal soil:
+mineral -	48%
+water -		25%
+air -		25%
+organic -	2%
+
+
+security problems?:
+DOS attack via sending giant stream of data through RPC
+
+active processes have:
+inputs they pull from
+outputs they push to
+if they don't pull and/or push, they are not active processes
+
+resource dumps provide an interface for:?
+generators that take resources away - stopiteration when resources run dry
+generators that add resources to the dump - stopiteration when resource limit reached?
+
+
+change sectors from a list to a dictionary-graph? -doesn't perform as well
+
+change sector.resources to be an actual entity? (so that Use() interface can take entities)
+or give resources an interface to work with Use()? avoid entity overhead when unnecessary
+
+
+Radio waves operate on a large region scale
+
+
+Sensors and Affectors?
+
+Sensor:
+Person looking through telescope at an area.
+
+Affector:
+A flashlight illuminating an attenuated radius.
+
+Visual observation mapped finely grained (on the lowest level)
+Radio-wave observation mapped on a larger scale grid
+	since mapping on a fine level would be very expensive for long-ranges
+
+so observation layers are super-imposed on each other sort of hierarchically LOD style?
+
+different types of signals stress either the sensor or affector during detection processing
+depending on which is more efficient
+ie. illumination favors light affectors, since light sources are less common than objects that can be illuminated
+ie. vision favors visual sensors, as objects that can visualize are less common than objects that can be visualized
+but every signal type must have both a sensor and affector type, unless the affector knows how to affect an entity directly (ie. every object might be available to illumination affectors)
+but then it might not need to be a signal, and can be handled directly in the physics (ie. collisions perhaps?)
+
+Signal Types:
+Illumination	(light affectors)
+Vision		(visual sensors)
+Movement?
+Pressure-related:
+	-Flow (ie. liquid or air)
+	-Auditory	(sound affectors)
+	-Heat
+Inertia
+	-acceleration
+	-collision
+electromagnetism:
+	Electrism	(electrical affectors)
+	Magnetism	(magnetic affectors)
+	Radiation	(radio sensors)
+	Beams		(lasers)
+
+different signal types could have different types of obstructors
+ie. opaque walls obstruct several things, but glass might not obstruct illumination and vision
+
+
+***************************
+****Older Ideas Section****
+***************************
+
+[2,5]-[2,5]-[1,5]
+[2,5]-[2,5]
+
+
+CHANGE:
+
+space = system[]
+system = entity[]
+
+physics may need to be integrated more with spatial partitioning
+
+entity forces applied to systems directly? if attachments can support it
+
+analyze a system:
+-build a tree of constraints for each attachment/joint (max forces and direction, etc.)
+
+forces:
+-position (entity of application? can be transmitted through entities in a system)
+-direction
+-magnitude
+
+todo:
+sector indices won't work in relative systems...
+how to handle validation of sectors and entity movement?
+
+attachments:
+gravitational (normal and friction forces) - one-way force (person standing on a table)
+
+[[server side]]
+entity event: (ie. moving)
+-collect all observers (moving: initial + final observers)
+-notify observers
+
+observer:
+-if entity is not known, request entity information
+-update entity state with event
+-if connected to data-listeners (network-client, logging, etc.), broadcast notifications
+
+[[client-side:]]
+-if the entity wasn't known in the server-side observer object:
+	-receive new entity event with entity info and event
+-else currently known entity is simply updated from the event
+
+units
+composites
+systems
+
+force (vector) fields:
+add a "force" entity to all affected sectors
+pressure (tensor) fields: related
+
+work out line-of-sight rules:
+-line of sight through a doorway (system portal)
+
+0000000000
+0001200000
+0003400000
+0000000000
+0000000000
+0000000000
+0000AB0000
+0000CDE000
+0000000000
+0000000000
+
+00000000000000000000
+0000000x000000000000
+000000x0000000000000
+00000x00000000000000
+0000x000000000000000
+0000x000000000000000
+000x0000000000000000
+000x0000000000000000
+000x0000000000000000
+00x00000000000000000
+00x00000000000000000
+00x00000000000000000
+00x00000000000000000
+0x000000000000000000
+0x000000000000000000
+0x000000000000000000
+0x000000000000000000
+0x000000000000000000
+0x000000000000000000
+0x000000000000000000
+
+new idea:
+only free objects have a kinematic state
+attached or resting objects can have a separate state for orientation
+example:
+6 values for a vector corresponding to cube faces
+one describing front and one describing right-hand of a fixed object
+2 such vectors means 36 possible values (compress data)
+
+some unit types might need more (or less) orientation states
+
+some attachments (ball and socket) might have an orientation state
+
+
+systems:
+complex systems made up of simpler constructs
+
+-strings
+-loops
+-webs
+
+
+
+Mobiles (Systems?) and Fixtures (Entities attached to a system? Systems fixed in other systems at odd angles?)
+System (Reference Frame?): cluster of Locations
+Attachments
+
+Trains Tracks (and roads?)
+
+Position (reference point) and Orientation
+
+
+Entities store:
+Location and position of origin point
+Orientation
+Size/layout
+with this information, they can tell what other Locations they collide with
+re-notification occurs when the entity moves or changes orientation
+
+Locations store:
+a reference to any SYSTEM that is colliding with it
+all contained fixtures
+
+rotated rectangular layout to layout collision calculations:
+
+Unit (smallest part):
+-id
+-location
+-type
+	-bounding:
+		-type
+		[circular]
+			-diameter
+		[rectangular]
+			-layout matrix
+-state (based on type)
+
+
+System (multiple units at locations):
+
+
+
+Projectile:
+-Bottle
+
+
+Large Entity:
+
+AB
+CD
+
+
+circular (spherical) vs. Square (cube) collision bounding box
+
+
+System: (Fixed? Mobile?)
+	-ref to origin Location
+	-Position (local)
+	-Orientation
+	-Velocity	(Net Forces (acceleration) and change are updates)
+
+	-contained Location(s) [an array of them as a layout]
+		-Each Location
+			-Fixed Entities (can BECOME systems to move)
