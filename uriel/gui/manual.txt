@@ -1,0 +1,54 @@
+	Basic Program Setup
+	===================
+
+-Create a MainWindow or derived object
+-Optionally set the caption
+-Create any additional widgets
+-call MainWindow method: Run([optional onUpdate])
+
+	Standard Widgets
+	================
+-todo
+
+	Special Properties
+	==================
+
+MainWindow
+----------
+-caption
+-focus
+-active set (the chain of windows from main to top)
+
+	Message Groups and Handlers
+	===========================
+* - denotes a required handler if the implementation of a specific group is desired
+(if you define any handler in a group, then all *'d handlers in that group must also be defined)
+
+Fundamental
+-----------
+* OnDraw(renderer?)
+
+* OnMove(deltapos)
+* OnSize(size)
+
+Mouse
+-----
+OnMouseOver(cursor)
+OnMouseLeave(cursor)
+OnMouseMove(cursor)
+OnMouseButtonUp(cursor, button) return keep_grabbing (optional)
+OnMouseButtonDown(cursor, button) return grabber (optional)
+
+
+Keyboard
+--------
+* OnGainFocus(mainwindow)
+OnLoseFocus()
+
+* OnKeyDown(keydata)
+* OnKeyUp(keydata)
+
+Activity
+--------
+* OnActivate()
+* OnDeactivate()
